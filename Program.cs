@@ -21,20 +21,27 @@ namespace Files
 
             var phoneBook = new List<Contact> { bill, jenny, susan };
 
-            using (var writer = new StreamWriter(File.Open("contacts.txt", FileMode.OpenOrCreate)))
+            using (var writer = new StreamWriter(File.Open("contacts.csv", FileMode.OpenOrCreate)))
             {
-                writer.WriteLine("Hello there file!!! the random number is" + new Random().Next(1,21));
-
+                // write all the contacts to a file
+                phoneBook.ForEach(person => writer.WriteLine(person));
             }
+
+            var phoneFromFile = new List<Contact>();
 
             // read from a contact book (a file)
-            using (var reader = new StreamReader(File.Open("contacts.txt", FileMode.OpenOrCreate)))
+            using (var reader = new StreamReader(File.Open("contacts.csv", FileMode.OpenOrCreate)))
             {
-                var text = reader.ReadLine();
-                Console.WriteLine(text);
-
+               // read all the contacts from the file
+                while (reader.Peek() >= 0)
+                {
+                    var contactFromFile = reader.ReadLine();
+                    // ideal world, this would an object, of our Contact 
+                    var data = contactFromFile.Split(',');
+                    phoneFromFile.Add(new Contact(data));
+                }                
             }
-
+            phoneFromFile.ForEach(person => Console.WriteLine(person));
 
         }
     }
